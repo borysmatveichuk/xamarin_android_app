@@ -8,9 +8,20 @@
     tools:showIn="@layout/activity_main">
 
     <TextView
+        android:id="@+id/content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Hello World!" />
+        android:layout_marginTop="36dp"
+        android:layout_centerHorizontal="true"   
+        tools:text="Hello World!" />
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="16dp"
+        android:layout_below="@id/content"
+        android:minHeight="120dp"/>
 
 </RelativeLayout>

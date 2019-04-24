@@ -1,17 +1,22 @@
 ﻿using System;
-using Android.App;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.Design.Widget;
 using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
+using Model;
+using Android.Arch.Lifecycle;
+using Android.App;
 
 namespace App1Android
 {
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
     public class MainActivity : AppCompatActivity
     {
+        TextView content;
+
+        MainViewModel ViewModel;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -19,11 +24,52 @@ namespace App1Android
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.activity_main);
 
+            ViewModel = ViewModelProviders.Of(this).Get(Java.Lang.Class.FromType(typeof(MainViewModel))) as MainViewModel;
+
+            content = FindViewById<TextView>(Resource.Id.content);
+
             Android.Support.V7.Widget.Toolbar toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.toolbar);
             SetSupportActionBar(toolbar);
 
-            FloatingActionButton fab = FindViewById<FloatingActionButton>(Resource.Id.fab);
-            fab.Click += FabOnClick;
+            /*List<Question> questions = ViewModel.GetQuestions();
+
+            string questionsStr = "";
+            foreach(Question q in questions)
+            {
+                questionsStr += q.Content + "\n";
+            }
+            content.Text = questionsStr;
+            */
+            ViewModel.subjectQuestion.Subscribe(q =>
+            {
+                content.Text = q.Content;
+
+                initFragment(q);
+            });
+        }
+
+        private void initFragment(Question Question)
+        {
+            Android.Support.V4.App.FragmentTransaction fragmentTx = this.SupportFragmentManager.BeginTransaction();
+            Android.Support.V4.App.Fragment frag;
+            if (Question.inputType == InputType.text)
+            {
+                frag = FragmentEditText.NewInstance();
+            }
+            else
+            {
+                frag = FragmentRadioButton.NewInstance();
+            }
+
+
+            // Replace the fragment that is in the View fragment_container (if applicable).
+            fragmentTx.Replace(Resource.Id.fragment_container, frag);
+
+            // Add the transaction to the back stack.
+            fragmentTx.AddToBackStack(null);
+
+            // Commit the transaction.
+            fragmentTx.Commit();
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
@@ -45,7 +91,7 @@ namespace App1Android
 
         private void FabOnClick(object sender, EventArgs eventArgs)
         {
-            View view = (View) sender;
+            View view = (View)sender;
             Toast.MakeText(context: view?.Context, text: "Hello my friend!!!", duration: ToastLength.Short).Show();
             Snackbar.Make(view, "Replace with your own action", Snackbar.LengthLong)
                 .SetAction("Action", (Android.Views.View.IOnClickListener)null).Show();
@@ -56,6 +102,8 @@ namespace App1Android
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
-	}
+
+
+    }
 }
 

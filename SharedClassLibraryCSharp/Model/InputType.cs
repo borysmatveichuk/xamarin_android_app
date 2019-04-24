@@ -1,6 +1,6 @@
 ﻿namespace Model
 {
-    enum InputType
+    public enum InputType
     {
         text,
         select

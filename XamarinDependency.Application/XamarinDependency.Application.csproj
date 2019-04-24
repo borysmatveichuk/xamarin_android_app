@@ -5,13 +5,13 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4289BFEB-3266-49BD-A138-83A253F3389F}</ProjectGuid>
+    <ProjectGuid>{1A9F1F44-79CD-4B43-9A03-DCC7A30615D3}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TemplateGuid>{84dd83c5-0fe3-4294-9419-09e7c8ba324f}</TemplateGuid>
+    <TemplateGuid>{122416d6-6b49-4ee2-a1e8-b825f31c79fe}</TemplateGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>App1Android</RootNamespace>
-    <AssemblyName>App1Android</AssemblyName>
+    <RootNamespace>XamarinDependency.Application</RootNamespace>
+    <AssemblyName>XamarinDependency.Application</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
@@ -33,17 +33,13 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
+    <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
     <AndroidLinkMode>None</AndroidLinkMode>
     <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
-    <AotAssemblies>false</AotAssemblies>
-    <EnableLLVM>false</EnableLLVM>
-    <BundleAssemblies>false</BundleAssemblies>
-    <MandroidI18n />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>PdbOnly</DebugType>
     <DebugSymbols>True</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
     <Optimize>True</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -55,9 +51,6 @@
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SharedClassLibraryCSharp">
-      <HintPath>..\SharedClassLibraryCSharp\bin\Release\netstandard2.0\SharedClassLibraryCSharp.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -66,10 +59,7 @@
     <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FragmentEditText.cs" />
-    <Compile Include="FragmentRadioButton.cs" />
     <Compile Include="MainActivity.cs" />
-    <Compile Include="MainViewModel.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -82,15 +72,10 @@
     <AndroidResource Include="Resources\layout\activity_main.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\content_main.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\values\colors.xml" />
-    <AndroidResource Include="Resources\values\dimens.xml" />
     <AndroidResource Include="Resources\values\ic_launcher_background.xml" />
     <AndroidResource Include="Resources\values\strings.xml" />
     <AndroidResource Include="Resources\values\styles.xml" />
-    <AndroidResource Include="Resources\menu\menu_main.xml" />
     <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher.xml" />
     <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher_round.xml" />
     <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher.png" />
@@ -110,54 +95,10 @@
     <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_round.png" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.1</Version>
-    </PackageReference>
-    <PackageReference Include="System.Reactive">
-      <Version>4.1.5</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Arch.Lifecycle.Common">
-      <Version>1.1.1.1</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Arch.Lifecycle.Extensions">
-      <Version>1.1.1.1</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Arch.Lifecycle.LiveData">
-      <Version>1.1.1.1</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Arch.Lifecycle.LiveData.Core">
-      <Version>1.1.1.1</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Arch.Lifecycle.Runtime">
-      <Version>1.1.1.1</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Arch.Lifecycle.ViewModel">
-      <Version>1.1.1.1</Version>
-    </PackageReference>
     <PackageReference Include="Xamarin.Android.Support.Design" Version="28.0.0.1" />
     <PackageReference Include="Xamarin.Android.Support.Core.Utils" Version="28.0.0.1" />
     <PackageReference Include="Xamarin.Android.Support.CustomTabs" Version="28.0.0.1" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.1.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\layout\fragment_radio_button.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\layout\fragment_edit_text.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\layout\item_edit_text.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\layout\item_radio.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
+    <PackageReference Include="Xamarin.Essentials" Version="1.0.1" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

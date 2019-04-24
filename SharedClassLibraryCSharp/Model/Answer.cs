@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Model
 {
-    class Answer
+    public class Answer
     {
         public string Id { get; set; }
         public string Content { get; set; }
