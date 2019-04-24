@@ -44,11 +44,17 @@ namespace App1Android
 
             ViewModel.subjectQuestion.Subscribe(q =>
             {
+                
                 //Toast.MakeText(Context, q.Answers[0].Content, ToastLength.Short).Show();
                 for(int i=0; i < q.Answers.Count; i++)
                 {
                     var radioButton = new RadioButton(this.Context);
                     radioButton.Text = q.Answers[i].Content;
+                    radioButton.Tag = q.Answers[i].Id;
+                    radioButton.Click += (sender, e) => {
+                        //https://docs.microsoft.com/ru-ru/xamarin/android/internals/api-design#Events_and_Listeners
+                        Toast.MakeText(Context, q.Answers[0].Content, ToastLength.Short).Show();
+                    };
                     RadioGroup.AddView(radioButton);
                 }
                
