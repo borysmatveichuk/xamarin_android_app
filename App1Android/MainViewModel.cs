@@ -22,14 +22,14 @@ namespace App1Android
     public class MainViewModel : ViewModel
     {
         private QuestionRepository repo;
-        private int TotalScore = 0;
+        private int totalScore = 0;
 
         public BehaviorSubject<Question> subjectQuestion;
 
         public MainViewModel()
         {
             repo = new QuestionRepository();
-            subjectQuestion = new BehaviorSubject<Question>(repo.GetNextQuestion("2"));
+            subjectQuestion = new BehaviorSubject<Question>(repo.GetFirstQuestion());
            
         }
 
@@ -43,19 +43,19 @@ namespace App1Android
 
         public void SetCurrentAnswer(Answer answer)
         {
-            TotalScore += answer.Points;
+            totalScore += answer.Points;
             subjectQuestion.OnNext(repo.GetNextQuestion(answer.Next));
         }
 
         public void SetCurrentQuestion(Question question)
         {
-            TotalScore += question.Points ?? default(int);
+            totalScore += question.Points ?? default;
             subjectQuestion.OnNext(repo.GetNextQuestion(question.Next));
         }
 
         public int GetTotalScore()
         {
-            return TotalScore;
+            return totalScore;
         }
 
     }

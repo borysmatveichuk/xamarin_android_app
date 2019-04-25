@@ -1,19 +1,27 @@
-﻿using System;
-using Android.OS;
+﻿using Android.OS;
 using Android.Views;
 using Android.Widget;
+using Model;
+using Newtonsoft.Json;
 
 namespace App1Android
 {
     public class FragmentEditText : FragmentBase
     {
-        public static FragmentEditText NewInstance()
+        const string ARG_QUESTION = "question";
+        public static FragmentEditText NewInstance(Question question)
         {
             FragmentEditText Fragment = new FragmentEditText();
+            Bundle bundle = new Bundle();
+            bundle.PutString(ARG_QUESTION, JsonConvert.SerializeObject(question));
+            Fragment.Arguments = bundle;
             return Fragment;           
         }
 
-        EditText AnswerText;
+        private Question currentQuestion;
+
+        private EditText answerText;
+        private Button nextButton;
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
@@ -24,12 +32,23 @@ namespace App1Android
         {
             base.OnViewCreated(view, savedInstanceState);
 
-            AnswerText = view.FindViewById<EditText>(Resource.Id.answer_text);
+            currentQuestion = JsonConvert.DeserializeObject<Question>(Arguments.GetString(ARG_QUESTION, ""));
 
-            viewModel.subjectQuestion.Subscribe(q =>
+            nextButton = view.FindViewById<Button>(Resource.Id.next_question);
+            nextButton.Enabled = false;
+            nextButton.Click += (sender, e) =>
             {
-                AnswerText.Text = q.Content;
-            });
+                viewModel.SetCurrentQuestion(currentQuestion);
+            };
+
+            answerText = view.FindViewById<EditText>(Resource.Id.answer_text);
+            answerText.TextChanged += delegate
+            {
+                if (answerText.Text.Length > 0)
+                {
+                    nextButton.Enabled = true;
+                }
+            };
         }
     }
 }

@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:text="@string/congratulations"
+        android:id="@+id/congratulations"        
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minWidth="25px"
@@ -13,10 +13,11 @@
         android:layout_margin="16dp"
         android:gravity="center_horizontal"
         android:textColor="@android:color/holo_blue_light"
-        android:id="@+id/congratulations"
-        android:textSize="18" />
+        android:text="@string/congratulations"
+        android:textSize="18sp" />
     
-    <TextView
+    <TextView        
+        android:id="@+id/score"
         android:text="@string/your_score"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,7 +26,6 @@
         android:layout_margin="16dp"
         android:gravity="center_horizontal"
         android:textColor="@android:color/holo_blue_light"
-        android:id="@+id/score"
-        android:textSize="18" />
+        android:textSize="18sp" />
 
 </LinearLayout>

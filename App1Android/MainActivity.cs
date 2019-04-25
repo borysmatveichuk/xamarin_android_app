@@ -1,22 +1,24 @@
-﻿using System;
+﻿using Attribute = Android.App.ActivityAttribute;
+using Android.Arch.Lifecycle;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.Design.Widget;
-using Android.Support.V7.App;
+using SupportActivity = Android.Support.V7.App.AppCompatActivity;
 using Android.Views;
 using Android.Widget;
 using Model;
-using Android.Arch.Lifecycle;
-using Android.App;
+using System;
+using Android.Support.V4.App;
 
 namespace App1Android
 {
-    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
-    public class MainActivity : AppCompatActivity
+    [Attribute(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
+    public class MainActivity : SupportActivity
     {
         TextView content;
 
         MainViewModel viewModel;
+        private IDisposable disposable;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -31,44 +33,44 @@ namespace App1Android
             Android.Support.V7.Widget.Toolbar toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.toolbar);
             SetSupportActionBar(toolbar);
 
-            /*List<Question> questions = ViewModel.GetQuestions();
-
-            string questionsStr = "";
-            foreach(Question q in questions)
+            disposable = viewModel.subjectQuestion.Subscribe(q =>
             {
-                questionsStr += q.Content + "\n";
-            }
-            content.Text = questionsStr;
-            */
-            viewModel.subjectQuestion.Subscribe(q =>
-            {
-                content.Text = q.Content;
+                if (q != null) {
+                    content.Text = q.Content;
+                } else {
+                    content.Text = "";
+                };                
 
                 initFragment(q);
             });
         }
 
-        private void initFragment(Question Question)
+        protected override void OnDestroy()
         {
-            Android.Support.V4.App.FragmentTransaction fragmentTx = this.SupportFragmentManager.BeginTransaction();
-            Android.Support.V4.App.Fragment frag;
-            if (Question.inputType == InputType.text)
+            base.OnDestroy();
+            disposable?.Dispose();
+        }
+
+        private void initFragment(Question question)
+        {
+            FragmentTransaction fragmentTx = this.SupportFragmentManager.BeginTransaction();
+            Fragment frag;
+
+            if (question == null)
             {
-                frag = FragmentEditText.NewInstance();
+                frag = FragmentFinish.NewInstance();
+            }
+            else if (question.inputType == InputType.text)
+            {
+                frag = FragmentEditText.NewInstance(question);
             }
             else
             {
-                frag = FragmentRadioButton.NewInstance();
+                frag = FragmentRadioButton.NewInstance(question);
             }
 
-
-            // Replace the fragment that is in the View fragment_container (if applicable).
             fragmentTx.Replace(Resource.Id.fragment_container, frag);
-
-            // Add the transaction to the back stack.
             fragmentTx.AddToBackStack(null);
-
-            // Commit the transaction.
             fragmentTx.Commit();
         }
 
@@ -89,20 +91,12 @@ namespace App1Android
             return base.OnOptionsItemSelected(item);
         }
 
-        private void FabOnClick(object sender, EventArgs eventArgs)
-        {
-            View view = (View)sender;
-            Toast.MakeText(context: view?.Context, text: "Hello my friend!!!", duration: ToastLength.Short).Show();
-            Snackbar.Make(view, "Replace with your own action", Snackbar.LengthLong)
-                .SetAction("Action", (Android.Views.View.IOnClickListener)null).Show();
-        }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
-
 
     }
 }

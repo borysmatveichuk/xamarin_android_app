@@ -16,6 +16,8 @@ namespace App1Android
             return Fragment;           
         }
 
+        private TextView scoreText;
+
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             return inflater.Inflate(Resource.Layout.fragment_finish, container, false);
@@ -23,7 +25,10 @@ namespace App1Android
 
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
-            base.OnViewCreated(view, savedInstanceState);      
+            base.OnViewCreated(view, savedInstanceState);
+
+            scoreText = view.FindViewById<TextView>(Resource.Id.score);
+            scoreText.Text = view.Context.GetString(Resource.String.your_score, viewModel.GetTotalScore());
         }
     }
 }
