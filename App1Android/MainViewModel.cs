@@ -19,9 +19,10 @@ using Xamarin.Essentials;
 
 namespace App1Android
 {
-    class MainViewModel : ViewModel
+    public class MainViewModel : ViewModel
     {
         private QuestionRepository repo;
+        private int TotalScore = 0;
 
         public BehaviorSubject<Question> subjectQuestion;
 
@@ -38,6 +39,23 @@ namespace App1Android
             questions = repo.GetQuestions();
 
             return questions;
+        }
+
+        public void SetCurrentAnswer(Answer answer)
+        {
+            TotalScore += answer.Points;
+            subjectQuestion.OnNext(repo.GetNextQuestion(answer.Next));
+        }
+
+        public void SetCurrentQuestion(Question question)
+        {
+            TotalScore += question.Points ?? default(int);
+            subjectQuestion.OnNext(repo.GetNextQuestion(question.Next));
+        }
+
+        public int GetTotalScore()
+        {
+            return TotalScore;
         }
 
     }

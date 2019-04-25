@@ -1,14 +1,12 @@
-﻿using System;
-
-using Android.Support.V4.App;
-using Android.Arch.Lifecycle;
-using Android.OS;
+﻿using Android.OS;
 using Android.Views;
 using Android.Widget;
+using Model;
+using System;
 
 namespace App1Android
 {
-    public class FragmentRadioButton : Fragment
+    public class FragmentRadioButton : FragmentBase
     {
         public static FragmentRadioButton NewInstance()
         {
@@ -16,48 +14,54 @@ namespace App1Android
             return Fragment;
         }
 
-        MainViewModel ViewModel;
-        RadioGroup RadioGroup;
+        private RadioGroup radioGroup;
+        private Button nextButton;
 
-        public override void OnCreate(Bundle savedInstanceState)
-        {
-            base.OnCreate(savedInstanceState);
-
-            // Create your fragment here
-            ViewModel = ViewModelProviders.Of(Activity).Get(Java.Lang.Class.FromType(typeof(MainViewModel))) as MainViewModel;
-        }
+        private Question CurrentQuestion;
+        private Answer CurrentAnswer;
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            // Use this to return your custom view for this Fragment
-            // return inflater.Inflate(Resource.Layout.YourFragment, container, false);
-
-            base.OnCreateView(inflater, container, savedInstanceState);
-
             return inflater.Inflate(Resource.Layout.fragment_radio_button, container, false);
         }
 
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
-            RadioGroup = view.FindViewById<RadioGroup>(Resource.Id.radio_group);
-
-            ViewModel.subjectQuestion.Subscribe(q =>
+            radioGroup = view.FindViewById<RadioGroup>(Resource.Id.radio_group);
+            nextButton = view.FindViewById<Button>(Resource.Id.next_question);
+            nextButton.Enabled = false;
+            nextButton.Click += (sender, e) =>
             {
-                
-                //Toast.MakeText(Context, q.Answers[0].Content, ToastLength.Short).Show();
-                for(int i=0; i < q.Answers.Count; i++)
+                viewModel.SetCurrentAnswer(CurrentAnswer);
+                Toast.MakeText(Context, CurrentAnswer.Content + " " + CurrentAnswer.Id + " " + CurrentAnswer.Next, ToastLength.Long).Show();
+            };
+
+            viewModel.subjectQuestion.Subscribe(q =>
+            {
+
+                CurrentQuestion = q;
+
+                for (int i = 0; i < q.Answers.Count; i++)
                 {
-                    var radioButton = new RadioButton(this.Context);
-                    radioButton.Text = q.Answers[i].Content;
-                    radioButton.Tag = q.Answers[i].Id;
-                    radioButton.Click += (sender, e) => {
-                        //https://docs.microsoft.com/ru-ru/xamarin/android/internals/api-design#Events_and_Listeners
-                        Toast.MakeText(Context, q.Answers[0].Content, ToastLength.Short).Show();
+                    var radioButton = new RadioButton(this.Context)
+                    {
+                        Text = q.Answers[i].Content,
+                        Tag = (int)i,
                     };
-                    RadioGroup.AddView(radioButton);
+                    radioButton.Click += (sender, e) =>
+                    {
+
+                        var SelectedRadio = (RadioButton)sender;
+                        if (SelectedRadio.Enabled)
+                        {
+                            nextButton.Enabled = true;
+                        }
+                        CurrentAnswer = CurrentQuestion.Answers[(int)SelectedRadio.Tag];
+                    };
+                    radioGroup.AddView(radioButton);
                 }
-               
+
             });
         }
     }

@@ -16,7 +16,7 @@ namespace App1Android
     {
         TextView content;
 
-        MainViewModel ViewModel;
+        MainViewModel viewModel;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -24,7 +24,7 @@ namespace App1Android
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.activity_main);
 
-            ViewModel = ViewModelProviders.Of(this).Get(Java.Lang.Class.FromType(typeof(MainViewModel))) as MainViewModel;
+            viewModel = ViewModelProviders.Of(this).Get(Java.Lang.Class.FromType(typeof(MainViewModel))) as MainViewModel;
 
             content = FindViewById<TextView>(Resource.Id.content);
 
@@ -40,7 +40,7 @@ namespace App1Android
             }
             content.Text = questionsStr;
             */
-            ViewModel.subjectQuestion.Subscribe(q =>
+            viewModel.subjectQuestion.Subscribe(q =>
             {
                 content.Text = q.Content;
 
@@ -106,4 +106,3 @@ namespace App1Android
 
     }
 }
-
