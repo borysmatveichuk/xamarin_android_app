@@ -35,11 +35,7 @@ namespace App1Android
 
             disposable = viewModel.subjectQuestion.Subscribe(q =>
             {
-                if (q != null) {
-                    content.Text = q.Content;
-                } else {
-                    content.Text = "";
-                };                
+                content.Text = q?.Content ?? "";
 
                 initFragment(q);
             });
@@ -55,7 +51,7 @@ namespace App1Android
         {
             FragmentTransaction fragmentTx = this.SupportFragmentManager.BeginTransaction();
             Fragment frag;
-
+           
             if (question == null)
             {
                 frag = FragmentFinish.NewInstance();
@@ -64,14 +60,17 @@ namespace App1Android
             {
                 frag = FragmentEditText.NewInstance(question);
             }
-            else
+            else if(question.inputType == InputType.select)
             {
                 frag = FragmentRadioButton.NewInstance(question);
+            } else
+            {
+                throw new ArgumentException("Unknown Question type!");
             }
 
-            fragmentTx.Replace(Resource.Id.fragment_container, frag);
-            fragmentTx.AddToBackStack(null);
-            fragmentTx.Commit();
+            fragmentTx.Replace(Resource.Id.fragment_container, frag)
+                .AddToBackStack(null)
+                .Commit();
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
